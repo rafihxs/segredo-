@@ -10,7 +10,58 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
+.hidden { display:none; }
 
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-top:20px;
+}
+
+.chapter{
+  padding:20px;
+  border-radius:15px;
+  border:none;
+  font-size:16px;
+  cursor:pointer;
+  background:rgba(255,255,255,0.1);
+  color:white;
+  backdrop-filter:blur(10px);
+  transition:0.3s;
+}
+
+.chapter:hover{
+  transform:scale(1.05);
+  background:rgba(255,255,255,0.2);
+}
+
+.locked{
+  opacity:0.4;
+  cursor:not-allowed;
+}
+
+.card{
+  background:rgba(255,255,255,0.1);
+  padding:25px;
+  border-radius:20px;
+  backdrop-filter:blur(15px);
+  color:white;
+}
+
+.btn{
+  margin-top:15px;
+  padding:10px 15px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.secondary{
+  background:#444;
+  color:white;
+}
+  
 *{
 margin:0;
 padding:0;
@@ -193,7 +244,44 @@ font-size:22px;
 }
 
 </style>
+.final{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:black;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  color:white;
+  z-index:999;
+  animation: fadeIn 2s ease-in-out;
+}
 
+#bigText{
+  font-size:40px;
+  opacity:0;
+  animation: showText 3s forwards;
+}
+
+#finalMsg{
+  margin-top:20px;
+  font-size:18px;
+  opacity:0;
+  animation: showText 5s forwards;
+}
+
+@keyframes showText{
+  to { opacity:1; }
+}
+
+@keyframes fadeIn{
+  from { opacity:0; }
+  to { opacity:1; }
+}
 </head>
 
 <body>
@@ -311,4 +399,133 @@ document.getElementById("world").style.display="block";
 </script>
 
 </body>
+<!-- TELA FINAL -->
+<div id="finalScreen" class="hidden final">
+  <h1 id="bigText"></h1>
+  <p id="finalMsg"></p>
+</div>
 </html>
+<!-- CAPÍTULOS -->
+<div id="chapters" class="hidden">
+
+  <h2 class="title">Escolha um capítulo</h2>
+
+  <div class="grid">
+
+    <button class="chapter locked" id="c1" onclick="openChapter(1)">
+      Capítulo 1 🔒
+    </button>
+
+    <button class="chapter locked" id="c2" onclick="openChapter(2)">
+      Capítulo 2 🔒
+    </button>
+
+    <button class="chapter locked" id="c3" onclick="openChapter(3)">
+      Capítulo 3 🔒
+    </button>
+
+    <button class="chapter locked" id="c4" onclick="openChapter(4)">
+      Capítulo Final 🔒
+    </button>
+
+  </div>
+
+</div>
+
+<!-- LEITOR DE CAPÍTULO -->
+<div id="reader" class="hidden">
+  <div class="card">
+    <h2 id="chapterTitle"></h2>
+    <p id="chapterText"></p>
+
+    <button onclick="nextChapter()" class="btn">Próximo ➝</button>
+    <button onclick="backMenu()" class="btn secondary">Voltar</button>
+  </div>
+</div>
+
+<script>
+let progress = localStorage.getItem("progress") || 1;
+
+function showChapters() {
+  document.getElementById("chapters").classList.remove("hidden");
+  unlockChapters();
+}
+
+function unlockChapters() {
+  for (let i = 1; i <= 4; i++) {
+    let btn = document.getElementById("c" + i);
+
+    if (i <= progress) {
+      btn.classList.remove("locked");
+      btn.innerText = "Capítulo " + i;
+    }
+  }
+}
+
+function openChapter(n) {
+  if (n > progress) return;
+
+  document.getElementById("chapters").classList.add("hidden");
+  document.getElementById("reader").classList.remove("hidden");
+
+  const texts = {
+    1: "Esse é o começo… onde tudo que eu sinto por você começa a ganhar forma. Mesmo nos dias difíceis, você sempre foi meu pensamento mais leve.",
+    2: "Aqui eu aprendi o valor do silêncio, da saudade e do quanto alguém pode fazer falta mesmo estando longe.",
+    3: "Esse capítulo é sobre arrependimento… sobre crescer e entender o quanto você é importante pra mim.",
+    4: "E aqui… eu só quero te dizer uma coisa: eu te amo de um jeito que não cabe em palavras."
+  };
+
+  document.getElementById("chapterTitle").innerText = "Capítulo " + n;
+  document.getElementById("chapterText").innerText = texts[n];
+  window.currentChapter = n;
+}
+
+function nextChapter() {
+  if (window.currentChapter < 4) {
+    progress = Math.max(progress, window.currentChapter + 1);
+    localStorage.setItem("progress", progress);
+
+    openChapter(window.currentChapter + 1);
+  } else {
+    document.getElementById("chapterText").innerText =
+      "Fim… mas o que eu sinto por você não tem fim.";
+  }
+}
+
+function backMenu() {
+  document.getElementById("reader").classList.add("hidden");
+  document.getElementById("chapters").classList.remove("hidden");
+  unlockChapters();
+}
+
+// inicial
+setTimeout(showChapters, 1500);
+</script> 
+function finishStory(){
+  document.getElementById("reader").classList.add("hidden");
+  document.getElementById("chapters").classList.add("hidden");
+  document.getElementById("finalScreen").classList.remove("hidden");
+
+  typeWriter("EU TE AMO", "bigText", 150);
+
+  setTimeout(() => {
+    document.getElementById("finalMsg").innerText =
+      "Isso não é só uma frase... é tudo que eu sinto por você, todos os dias.";
+  }, 2500);
+}
+
+function typeWriter(text, elementId, speed){
+  let i = 0;
+  let el = document.getElementById(elementId);
+  el.innerHTML = "";
+
+  function typing(){
+    if(i < text.length){
+      el.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, speed);
+    }
+  }
+
+  typing();
+}
