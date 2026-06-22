@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Refúgio da Gaby ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+
+height:100vh;
+overflow:hidden;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:
+linear-gradient(180deg,#07152d,#123661,#274f80);
+
+color:white;
+
+}
+
+canvas{
+
+position:fixed;
+inset:0;
+z-index:-2;
+
+}
+
+#aurora{
+
+position:fixed;
+
+width:200%;
+height:200%;
+
+background:
+
+radial-gradient(circle,#7fffd433 0%,transparent 35%),
+radial-gradient(circle,#ffb3ff22 0%,transparent 40%),
+radial-gradient(circle,#9cffd922 0%,transparent 45%);
+
+filter:blur(80px);
+
+animation:aurora 20s linear infinite;
+
+z-index:-1;
+
+}
+
+@keyframes aurora{
+
+0%{
+transform:translate(-20%,-20%) rotate(0deg);
+}
+
+50%{
+transform:translate(-10%,10%) rotate(180deg);
+}
+
+100%{
+transform:translate(-20%,-20%) rotate(360deg);
+}
+
+}
+
+.card{
+
+width:90%;
+max-width:700px;
+
+padding:40px;
+
+border-radius:30px;
+
+text-align:center;
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.15);
+
+box-shadow:0 15px 40px rgba(0,0,0,.4);
+
+animation:entrada 2s;
+
+}
+
+@keyframes entrada{
+
+from{
+
+opacity:0;
+transform:translateY(40px);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+}
+
+h1{
+
+font-family:Great Vibes;
+
+font-size:65px;
+
+margin-bottom:15px;
+
+}
+
+p{
+
+font-size:18px;
+
+line-height:33px;
+
+margin-bottom:30px;
+
+}
+
+button{
+
+padding:15px 35px;
+
+font-size:18px;
+
+border:none;
+
+border-radius:50px;
+
+cursor:pointer;
+
+background:white;
+
+color:#123661;
+
+transition:.4s;
+
+}
+
+button:hover{
+
+transform:scale(1.08);
+
+box-shadow:0 0 25px white;
+
+}
+
+#world{
+
+display:none;
+
+text-align:center;
+
+}
+
+#world h2{
+
+font-size:45px;
+
+margin-bottom:15px;
+
+}
+
+#contador{
+
+margin-top:20px;
+
+font-size:22px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<canvas id="ceu"></canvas>
+
+<div id="aurora"></div>
+
+<div class="card" id="intro">
+
+<h1>Para Gaby 🤍</h1>
+
+<p>
+
+Se hoje foi um dia cansativo...
+
+Respire fundo.
+
+Este pequeno universo foi criado apenas para você.
+
+Aqui não existe pressão.
+
+Não existe correria.
+
+Existe apenas paz...
+
+e todo o carinho que sinto por você.
+
+</p>
+
+<button onclick="entrar()">
+
+Entrar no meu refúgio ✨
+
+</button>
+
+</div>
+
+<div id="world">
+
+<h2>Bem-vinda ❤️</h2>
+
+<p>
+
+Agora a aventura começa...
+
+Clique nas estrelas para descobrir mensagens escondidas.
+
+</p>
+
+<div id="contador">
+
+❤️ 0 / 30 mensagens encontradas
+
+</div>
+
+</div>
+
+<script>
+
+const canvas=document.getElementById("ceu");
+
+const ctx=canvas.getContext("2d");
+
+canvas.width=innerWidth;
+
+canvas.height=innerHeight;
+
+let estrelas=[];
+
+for(let i=0;i<250;i++){
+
+estrelas.push({
+
+x:Math.random()*canvas.width,
+
+y:Math.random()*canvas.height,
+
+r:Math.random()*2
+
+});
+
+}
+
+function desenhar(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+estrelas.forEach(e=>{
+
+ctx.beginPath();
+
+ctx.fillStyle="rgba(255,255,255,"+(0.4+Math.random()*0.6)+")";
+
+ctx.arc(e.x,e.y,e.r,0,6.3);
+
+ctx.fill();
+
+});
+
+requestAnimationFrame(desenhar);
+
+}
+
+desenhar();
+
+function entrar(){
+
+document.getElementById("intro").style.display="none";
+
+document.getElementById("world").style.display="block";
+
+}
+
+</script>
+
+</body>
+</html>
